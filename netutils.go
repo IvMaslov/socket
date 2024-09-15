@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"os/exec"
+	"strings"
 	"syscall"
 )
 
@@ -70,4 +71,25 @@ func open(name string) (int, error) {
 	}
 
 	return fd, nil
+}
+
+func getDefaultGateway() string {
+	data, err := exec.Command("/sbin/ip", "route").Output()
+	if err != nil {
+		return ""
+	}
+
+	for _, line := range strings.Split(string(data), "\n") {
+		if strings.HasPrefix(line, "default") {
+			splitted := strings.Split(line, " ")
+
+			for i, v := range splitted {
+				if v == "dev" {
+					return splitted[i+1]
+				}
+			}
+		}
+	}
+
+	return ""
 }

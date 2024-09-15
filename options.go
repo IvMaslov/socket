@@ -20,8 +20,16 @@ func WithCIDR(cidr string) InterfaceOption {
 	}
 }
 
+// Option to set timeout for read and write for interface
 func WithTimeout(t time.Duration) InterfaceOption {
 	return func(i *Interface) {
 		i.timeout = t
+	}
+}
+
+// Option for setting default gateway
+func WithDefaultGateway() InterfaceOption {
+	return func(i *Interface) {
+		i.name = getDefaultGateway()
 	}
 }
