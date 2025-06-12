@@ -5,6 +5,8 @@ import (
 	"net"
 	"syscall"
 	"time"
+
+	"github.com/IvMaslov/netutils"
 )
 
 const (
@@ -30,13 +32,13 @@ func New(opts ...InterfaceOption) (*Interface, error) {
 	}
 
 	if i.name == defaultName {
-		err := createInterface(i.cidr)
+		err := netutils.CreateTapDevice(defaultName, i.cidr)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	fd, err := open(i.name)
+	fd, err := netutils.OpenRawSocket(i.name)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +63,7 @@ func (i *Interface) Write(buf []byte) (int, error) {
 
 func (i *Interface) Close() error {
 	if i.name == defaultName {
-		err := stopInterface()
+		err := netutils.StopTapDevice(defaultName)
 		if err != nil {
 			return fmt.Errorf("failed to stop default interface: %w", err)
 		}

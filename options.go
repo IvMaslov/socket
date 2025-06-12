@@ -2,6 +2,8 @@ package socket
 
 import (
 	"time"
+
+	"github.com/IvMaslov/netutils"
 )
 
 type InterfaceOption func(*Interface)
@@ -30,6 +32,6 @@ func WithTimeout(t time.Duration) InterfaceOption {
 // Option for setting default gateway
 func WithDefaultGateway() InterfaceOption {
 	return func(i *Interface) {
-		i.name = getDefaultGateway()
+		i.name = netutils.GetDefaultGatewayDevice()
 	}
 }
