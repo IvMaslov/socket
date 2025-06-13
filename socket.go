@@ -53,6 +53,21 @@ func New(opts ...InterfaceOption) (*Interface, error) {
 	return i, nil
 }
 
+// Name returns name of device
+func (i *Interface) Name() string {
+	return i.name
+}
+
+// CIDR returns cidr associated with this device
+func (i *Interface) CIDR() string {
+	return i.cidr
+}
+
+// FD returns file descriptor of raw socket
+func (i *Interface) FD() int {
+	return i.fd
+}
+
 func (i *Interface) Read(buf []byte) (int, error) {
 	return syscall.Read(i.fd, buf)
 }
